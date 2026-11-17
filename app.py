@@ -10,21 +10,12 @@
 
 import json
 import time
+import traceback
 from pathlib import Path
 from urllib.parse import quote_plus
 
 import streamlit as st
 import streamlit.components.v1 as components
-import pandas as pd
-
-from search_engine import SearchEngine, ProxyConfig
-from shop_finder import ShopFinder
-from sales_stats import SalesStats, merge_sales_reports
-from competitor_analysis import analyze_competitors, CompetitorReport, merge_comp_reports
-from growth_plan import generate_growth_plan, GrowthPlanInput
-from cities import get_country_list, get_cities, COUNTRIES, get_country_en, get_country_code,     get_regions, get_countries_by_region, get_region_en
-from phone_utils import format_phone
-from exporter import export_file
 
 # ===== 页面配置 =====
 st.set_page_config(
@@ -32,6 +23,23 @@ st.set_page_config(
     page_icon="🌐",
     layout="wide",
 )
+
+# ===== 带诊断的重依赖导入：失败时直接把错误显示在页面上 =====
+try:
+    import pandas as pd
+
+    from search_engine import SearchEngine, ProxyConfig
+    from shop_finder import ShopFinder
+    from sales_stats import SalesStats, merge_sales_reports
+    from competitor_analysis import analyze_competitors, CompetitorReport, merge_comp_reports
+    from growth_plan import generate_growth_plan, GrowthPlanInput
+    from cities import get_country_list, get_cities, COUNTRIES, get_country_en, get_country_code, get_regions, get_countries_by_region, get_region_en
+    from phone_utils import format_phone
+    from exporter import export_file
+except Exception:
+    st.error("启动失败 / Startup failed")
+    st.code(traceback.format_exc())
+    st.stop()
 
 # ===== 全局视觉精修（企业级数据看板风格：蓝 + 琥珀强调，提升对比度与层次）=====
 # 注意：仅调整配色/字体/间距/对比度，不改变任何布局与功能
