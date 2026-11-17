@@ -481,7 +481,7 @@ class ShopFinder:
         text = ""
         soup = None
         if html:
-            soup = BeautifulSoup(html, "lxml")
+            soup = BeautifulSoup(html, "html.parser")
             # 移除 script/style
             for tag in soup(["script", "style", "noscript"]):
                 tag.decompose()

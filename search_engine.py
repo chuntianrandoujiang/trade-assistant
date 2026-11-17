@@ -197,7 +197,7 @@ class SearchEngine:
         r = self.session.get(url, headers=headers, timeout=15)
         r.raise_for_status()
 
-        soup = BeautifulSoup(r.text, "lxml")
+        soup = BeautifulSoup(r.text, "html.parser")
         results = []
         # DuckDuckGo HTML 结果选择器
         for item in soup.select("div.result")[:max_results]:
@@ -259,7 +259,7 @@ class SearchEngine:
         r = self.session.get(url, headers=headers, timeout=15)
         r.raise_for_status()
 
-        soup = BeautifulSoup(r.text, "lxml")
+        soup = BeautifulSoup(r.text, "html.parser")
         results = []
         # Bing 结果选择器
         for item in soup.select("li.b_algo")[:max_results]:
